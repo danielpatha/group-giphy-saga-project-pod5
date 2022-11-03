@@ -1,0 +1,162 @@
+Notes:
+
+GET REQUEST
+
+Step 1: Component Level (SomethingList.js)
+	- YOU WANT TO DISPLAY SOMETHING
+	- useEffect -> Inside of that, you will do a FETCH_THING
+
+Step 2: Redux-Saga
+	-Watcher Saga
+	-Do a get request, with your response.data, do a SET_LIST_THING
+
+Step 3 - Redux
+	- Industry standard for "HOLD MY DATA"
+	- The array of what you have in your database//back-end
+
+Step 4 - Component
+	- Now that we have stuff (data), we want to display it
+	- useSelector to grab the data!
+	const basketList = useSelector((store) => store.basketList)
+	- Now, just like normal, go reder stuff
+
+POST REQUEST
+
+Step 1: Component Level
+	- Go collect data from your user
+	- dispach of type "ADD_TO_SOMETHING' with a payload of whatever you want to add
+
+Step 2: Redux-Saga
+	-Do a post request
+	- When you are done wiht your post request you HAVE TO call your FETCH_THING again
+	```
+	function* addNewTask(action) {
+  try {
+    const newTask = action.payload;
+    yield axios.post("/api/task", newTask);
+    yield put({ type: "FETCH_TASK" });
+  } catch (err) {
+    console.log(err);
+  }
+	```
+}
+
+Step 3: Redux-Saga
+	-Do a get request, with your response.data, do a SET_LIST_THING
+
+Step 4 - Redux
+	- Industry standard for "HOLD MY DATA"
+	- The array of what you have in your database//back-end
+
+Step 5 - Component
+	- This all happens asyc so, you do not need to "call" to rerender stuff on the DOM
+		- Redux saga just DOES IT FOR YOU
+	- useSelector to grab the data!
+	const basketList = useSelector((store) => store.basketList)
+	- Now, just like normal, go reder stuff
+
+
+****Reminder: You should probably be reusing your FETCH_THING in all of your other redux saga functions.
+
+
+Mary Mettille (she/they)
+  7:54 PM
+Typed up a little cleaner:
+7:54
+GET REQUEST
+Step 1: Component Level (SomethingList.js)
+  - GOAL: YOU WANT TO DISPLAY SOMETHING
+  - Inside your component, you will use a useEffect, so on page load, a dispatch will fire so you can go get data:
+     -> Code example:
+      // :arrow_down: On page load, fetch the tasks from the database
+      useEffect(() => {
+        dispatch({ type: "FETCH_TASK" });
+      }, []);
+Step 2: Redux-Saga
+  - Your watcher saga is a function that will listen for a bunch of actions. Think back to jQuery and your readyNow function, where you had all those click listeners!
+  - Once your watcher saga identifies that an action has been sent, it will run a worker saga function
+  - Inside that function, do a normal get request. Send your response.data to a reducer with SET_TASK
+  - Code example:
+      function* fetchTask() {
+        try {
+          const task = yield axios.get("/api/task");
+          yield put({ type: "SET_TASK", payload: task.data });
+        } catch {
+          console.log("get all error");
+        }
+}
+Step 3 - Reducer
+  - This is the array of what you have in your database//back-end.
+  - Code Example:
+      const task = (state = [], action) => {
+      switch (action.type) {
+        case 'SET_TASK':
+          return action.payload;
+        default:
+          return state;
+      }
+  };
+Step 4 - Back in Your Component
+  - Now that we have tasks (data), we want to display them
+  - We will use a useSelector to grab that data! See this code example:
+      const taskList = useSelector((store) => store.task)
+  - Now, just like normal, go render stuff
+POST REQUEST
+Step 1: Component Level
+  - Just like you have been doing, go collect data from your user.
+  - When you have the user's input, we want to send that to the backend.
+  - We are going to do this by dispatching with a payload of the stuff you want to add
+  - Code Example:
+      const handleSubmit = () => {
+        // :arrow_down: Dispatch the new task to redux-saga
+        dispatch({
+          type: "ADD_NEW_TASK",
+          payload: {
+            taskName: newTask,
+          },
+        });
+        // :arrow_down: Reset the newTask to an empty string
+        setNewTask("");
+      };
+Step 2: Redux-Saga
+  - Hey look! You are back in redux saga land!
+  - Here, we are going to do a get request with our action.payload! Once our post request has gone through successfully, we will do dispatch a FETCH_TASK again!
+  - Code example:
+      function* addNewTask(action) {
+        try {
+          const newTask = action.payload;
+          yield axios.post("/api/task", newTask);
+          // Refresh our list of tasks!
+          yield put({ type: "FETCH_TASK" });
+        } catch (err) {
+          console.log(err);
+        }
+      }
+Step 3: Redux-Saga
+  - Does this look familar? We are doing the same things that we did in the get request above. :)
+  - WE are going to do a normal get request. Send your response.data to a reducer with SET_TASK
+  - Code example:
+      function* fetchTask() {
+        try {
+          const task = yield axios.get("/api/task");
+          yield put({ type: "SET_TASK", payload: task.data });
+        } catch {
+          console.log("get all error");
+        }
+}
+Step 4 - Reducer
+  - Does this look familar? We are doing the same things that we did in the get request above. :)
+  - This is the array of what you have in your database//back-end.
+  - Code Example:
+      const task = (state = [], action) => {
+      switch (action.type) {
+        case 'SET_TASK':
+          return action.payload;
+        default:
+          return state;
+      }
+  };
+Step 5 - Component
+  - This all happens asyc so, you do not need to "call" to rerender stuff on the DOM
+  - Since we already used a 'useSelector' in our component, things will just automatically update! Whoot!
+****Reminder: You should probably be reusing your FETCH_TASK action in all of your other redux saga functions.**** (edited) 
