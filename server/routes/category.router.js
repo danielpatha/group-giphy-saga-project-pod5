@@ -17,4 +17,31 @@ router.get('/', (req, res) => {
     });
 });
 
+app.get('/search', (req, res) => {
+  axios({
+      method: 'GET',
+      url: 'https://api.giphy.com/v1/gifs/search',
+      params: {
+          api_key: process.env.GIPHY_API_KEY,
+          // q: add user input
+          limit: 10
+      }
+  })
+      .then((apiRes) => {
+          // send back the data from giphy
+          res.send(apiRes.data);
+
+          // You can send back your own custom object, too!
+          // res.send({
+          //     goodUrlToUse: apiRes.data.url
+          // })
+      })
+      .catch((err) => {
+          console.error('API req failed', err);
+          res.sendStatus(500);
+      });
+});
+
+
+
 module.exports = router;
