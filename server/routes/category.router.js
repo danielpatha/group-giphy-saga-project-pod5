@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const pool = require('../modules/pool');
-import axios from 'axios';
+// import axios from 'axios';
 
 
 const router = express.Router();
