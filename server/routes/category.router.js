@@ -1,49 +1,42 @@
 require('dotenv').config();
 const express = require('express');
 const pool = require('../modules/pool');
+const axios = require('axios')
 // import axios from 'axios';
 
 
 const router = express.Router();
 
+
 router.get('/', (req, res) => {
-  // return all categories
-  const queryText = `SELECT * FROM category ORDER BY name ASC`;
-  pool
-    .query(queryText)
-    .then((result) => {
-      res.send(result.rows);
+
+  console.log('REQ.PARAMS----->', req.query.q);
+  
+  axios({
+    method: 'GET',
+    url: `https://api.giphy.com/v1/gifs/search`,
+    params: {
+      api_key: process.env.GIPHY_API_KEY,
+      q: `${req.query.q}`,
+      limit: 10
+    }
+  })
+    .then((apiRes) => {
+     
+      let result = []
+      console.log('######################', apiRes.data.data[0].images.downsized.url)
+      
+      apiRes.data.data.map(item => (
+        result.push(item.images.downsized.url)
+      ))
+      console.log('************************', result);
+      res.send(result);
+    
     })
-    .catch((error) => {
-      console.log(`Error on query ${error}`);
+    .catch((err) => {
+      console.error('API req failed', err);
       res.sendStatus(500);
     });
-});
-
-router.get('/', (req, res) => {
-  axios({
-      method: 'GET',
-      url: 'https://api.giphy.com/v1/gifs/random',
-      params: {
-          api_key: process.env.GIPHY_API_KEY,
-          q: 'cats',
-          limit: 10
-      }
-  })
-      .then((apiRes) => {
-          // send back the data from giphy
-          res.send(apiRes.data);
-          console.log('data is', apiRes.data);
-
-          // You can send back your own custom object, too!
-          // res.send({
-          //     goodUrlToUse: apiRes.data.url
-          // })
-      })
-      .catch((err) => {
-          console.error('API req failed', err);
-          res.sendStatus(500);
-      });
 });
 
 

@@ -1,45 +1,44 @@
 
-import {useDispatch} from 'react-redux';
- 
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-function Search(){
-    console.log('in Search');
 
-    const dispatch = useDispatch();
+function Search() {
+  console.log('in Search');
 
-    let input = '';
+  const dispatch = useDispatch();
+  const [search, setSearch] = useState('')
 
- const handleSearch = (event) => {
-      input= event.target.value
+  const handleSearch = (event) => {
+    event.preventDefault()
+    setSearch(event.target.value)
   }
 
-const postSearch = (event) => {
+  const postSearch = (event) => {
     event.preventDefault();
-    console.log('input is', input);
 
-    dispatch ({
-        type: 'SEARCH_GIPHY',
-        payload: input
+    dispatch({
+      type: 'SEARCH_GIPHY',
+      payload: search
     })
 
-    // send input to GET API on server
+  }
 
-}
-
-    return (
+  return (
     <>
-    <form onSubmit={postSearch}>
-      <input
-        onChange={handleSearch}
-        type='text'
-        placeholder='type in your search!'
-      />
-      
-      <button type='submit'>Submit</button>
+
+      <form onSubmit={postSearch}>
+        <input
+          onChange={handleSearch}
+          type='text'
+          placeholder='type in your search!'
+        />
+        <button type='submit'>Submit</button>
+        {/* <GiphList /> */}
+        <button> Next </button>
+      </form>
 
 
-      <button> Next </button>
-    </form>
 
 
     </>);
