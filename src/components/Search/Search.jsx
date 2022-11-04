@@ -26,6 +26,7 @@ function Search() {
 
   return (
     <>
+
       <form onSubmit={postSearch}>
         <input
           onChange={handleSearch}
@@ -34,7 +35,10 @@ function Search() {
         />
         <button type='submit'>Submit</button>
         {/* <GiphList /> */}
+        <button> Next </button>
       </form>
+
+
 
 
     </>);

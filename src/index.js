@@ -14,6 +14,7 @@ import axios from 'axios';
 function* searchGiphy(action){
     console.log('in searchGiphy', action.payload);
 
+
     let response = yield axios.get('/api/category', ({
         params: {
             q: action.payload
@@ -31,6 +32,9 @@ function* searchGiphy(action){
 
 function* fetchGiphy(){
     let response = yield axios.get('/api/category');
+
+ let response = yield axios.POST('/api/category');
+    console.log('GET response:', response);
 
     yield put({
         type: 'SET_SEARCH',

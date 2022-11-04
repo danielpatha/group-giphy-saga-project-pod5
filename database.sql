@@ -21,3 +21,11 @@ CREATE TABLE "favorites"(
 
 INSERT INTO "favorites" ("image")
 VALUES ('https://media0.giphy.com/media/nXUCkgH6BmigU/giphy.gif?cid=31c1246e60zvqsbax6bodmlbeeoi1w1n2hknxzl1t293ayh0&rid=giphy.gif&ct=g');
+
+
+CREATE TABLE "favorite" (
+    "id" SERIAL PRIMARY KEY,
+    "url" VARCHAR (500) NOT NULL,
+    "category-id" INT
+);
+
