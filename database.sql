@@ -12,3 +12,12 @@ CREATE TABLE "category" (
 -- Default categories. You may change them :)
 INSERT INTO "category" ("name")
 VALUES ('funny'), ('meme'), ('sports'), ('cats');
+
+-- favorite table
+CREATE TABLE "favorites"(
+"id" SERIAL PRIMARY KEY,
+"image" VARCHAR NOT NULL,
+"favorite" BOOLEAN DEFAULT false);
+
+INSERT INTO "favorites" ("image")
+VALUES ('https://media0.giphy.com/media/nXUCkgH6BmigU/giphy.gif?cid=31c1246e60zvqsbax6bodmlbeeoi1w1n2hknxzl1t293ayh0&rid=giphy.gif&ct=g');
