@@ -13,7 +13,7 @@ import axios from 'axios';
 function* searchGiphy(){
     console.log('in searchGiphy');
 
-    let response = yield axios.get('/api/category');
+    let response = yield axios.POST('/api/category');
     console.log('GET response:', response);
 
     yield put({

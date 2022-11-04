@@ -34,7 +34,11 @@ const postSearch = (event) => {
         type='text'
         placeholder='type in your search!'
       />
+      
       <button type='submit'>Submit</button>
+
+
+      <button> Next </button>
     </form>
 
 
